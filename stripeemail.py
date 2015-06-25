@@ -16,15 +16,17 @@ class StripeEmailResource:
                                    'JSON was incorrect.')
 
         stripe.api_key = "XXX"
-        if event_json["type"] in ("charge.succeeded", "charge.failed", "charge.refunded", "charge.captured", "charge.updated", "charge.dispute.created",
-                                  "charge.dispute.updated", "charge.dispute.closed", "customer.created", "customer.subscription.created",
-                                  "customer.subscription.updated", "invoice.created", "invoice.updated", "invoice.payment_succeeded",
-                                  "invoice.payment_failed", "transfer.failed"):
+        if event_json["type"] in ("charge.succeeded", "charge.failed", "charge.refunded", "charge.captured",
+                                  "charge.updated", "charge.dispute.created", "charge.dispute.updated",
+                                  "charge.dispute.closed", "customer.created", "customer.subscription.created",
+                                  "customer.subscription.updated", "invoice.created", "invoice.updated",
+                                  "invoice.payment_succeeded", "invoice.payment_failed", "transfer.failed"):
             try:
                 id = event_json["id"]
                 event = stripe.Event.retrieve(id)
                 send_mail(("billing@example.com",), event_json["type"], str(event))
-            except (stripe.error.InvalidRequestError, stripe.error.AuthenticationError, stripe.error.APIConnectionError, stripe.error.StripeError) as err:
+            except (stripe.error.InvalidRequestError, stripe.error.AuthenticationError,
+                    stripe.error.APIConnectionError, stripe.error.StripeError) as err:
                 send_mail(("billing@example.com",), "Stripe Webhook Error", str(err.json_body['error']))
 
         resp.status = falcon.HTTP_200  # This is the default status
