@@ -1,5 +1,7 @@
 import json
 import falcon
+import os
+
 import stripe
 
 from emailsender import send_mail
@@ -15,7 +17,7 @@ class StripeEmailResource:
                                    'Could not decode the request body. The '
                                    'JSON was incorrect.')
 
-        stripe.api_key = "XXX"
+        stripe.api_key = os.environ["STRIPE_KEY"]
         if event_json["type"] in ("charge.succeeded", "charge.failed", "charge.refunded", "charge.captured",
                                   "charge.updated", "charge.dispute.created", "charge.dispute.updated",
                                   "charge.dispute.closed", "customer.created", "customer.subscription.created",
