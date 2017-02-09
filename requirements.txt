@@ -1,2 +1,2 @@
-falcon==0.3.0
-stripe==1.22.3
+falcon>=0.3.0
+stripe>=1.22.3
